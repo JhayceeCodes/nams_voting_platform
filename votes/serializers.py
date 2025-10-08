@@ -6,9 +6,10 @@ User = get_user_model()
 
 
 class CandidateSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
     class Meta:
         model = Candidate
-        fields = ["id", "name", "position"]
+        fields = "__all__"
 
 
 class PositionSerializer(serializers.ModelSerializer):
