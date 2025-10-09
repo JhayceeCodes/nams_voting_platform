@@ -6,23 +6,34 @@ User = get_user_model()
 
 
 class CandidateSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(required=False)
-    class Meta:
-        model = Candidate
-        fields = "__all__"
 
+   class Meta:
+        model = Candidate
+        fields = ["id", "name", "image", "position"]
+        """extra_kwargs = {
+            "position": {"read_only": True},
+        }
+"""
 
 class PositionSerializer(serializers.ModelSerializer):
-    candidates = CandidateSerializer(many=True, read_only=True)
+    """candidates = CandidateSerializer(many=True, required=False)
 
     class Meta:
         model = Position
-        fields = ["id", "name", "candidates", "election"]
+        fields = ["id", "name", "election", "candidates"]"""
+    candidates = CandidateSerializer(many=True, required=False)
+
+    class Meta:
+        model = Position
+        fields = ["id", "name", "election", "candidates"]
+        extra_kwargs = {
+            "election": {"read_only": True},
+        }
 
 
 class ElectionSerializer(serializers.ModelSerializer):
-    positions = PositionSerializer(many=True)
-
+    positions = PositionSerializer(many=True, required=False)
+   
     class Meta:
         model = Election
         fields = ["id", "title", "description", "start_date", "end_date", "positions"]

@@ -5,8 +5,9 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     is_admin = models.BooleanField(default=False)
     is_voter = models.BooleanField(default=True)
-    matric_no = models.CharField(max_length=9, unique=True, default=210561000)
+    matric_no = models.CharField(max_length=9, unique=True, default=None, null=True, blank=True)
 
+    
     def __str__(self):
         if self.is_admin:
             return f"Admin: {self.username}"
@@ -32,7 +33,6 @@ class Position(models.Model):
 
 
 class Candidate(models.Model):
-    election = models.ForeignKey(Election, on_delete=models.CASCADE, related_name="candidates")
     position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name="candidates")
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='candidates/', blank=True, null=True) 
@@ -54,3 +54,5 @@ class Vote(models.Model):
 
     def __str__(self):
         return f"{self.voter} -> {self.candidate.name} ({self.position.name})"
+
+
