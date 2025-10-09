@@ -5,30 +5,24 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class CandidateSerializer(serializers.ModelSerializer):
 
-   class Meta:
+class CandidateSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
+    position = serializers.PrimaryKeyRelatedField(queryset=Position.objects.all(), required=False)
+
+    class Meta:
         model = Candidate
         fields = ["id", "name", "image", "position"]
-        """extra_kwargs = {
-            "position": {"read_only": True},
-        }
-"""
+
+       
 
 class PositionSerializer(serializers.ModelSerializer):
-    """candidates = CandidateSerializer(many=True, required=False)
+    candidates = CandidateSerializer(many=True, read_only=True)
 
     class Meta:
         model = Position
-        fields = ["id", "name", "election", "candidates"]"""
-    candidates = CandidateSerializer(many=True, required=False)
+        fields = ["id", "name", "candidates", "election"]
 
-    class Meta:
-        model = Position
-        fields = ["id", "name", "election", "candidates"]
-        extra_kwargs = {
-            "election": {"read_only": True},
-        }
 
 
 class ElectionSerializer(serializers.ModelSerializer):

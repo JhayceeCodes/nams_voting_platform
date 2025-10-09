@@ -24,23 +24,34 @@ class Election(models.Model):
         return self.title
 
 
-class Position(models.Model):
+"""class Position(models.Model):
     election = models.ForeignKey(Election, on_delete=models.CASCADE, related_name="positions", null=True, blank=True)
     name = models.CharField(max_length=255)  # e.g., "President", "Secretary"
 
     def __str__(self):
-        return f"{self.name} ({self.election.title})"
+        return f"{self.name} ({self.election.title})"""
+
+class Position(models.Model):
+    name = models.CharField(max_length=100)
+    election = models.ForeignKey(
+        Election, on_delete=models.CASCADE, related_name="positions", null=True, blank=True
+    )
+
+    def __str__(self):
+        return f"{self.name} ({self.election.title if self.election else 'No Election'})"
+
 
 
 class Candidate(models.Model):
-    position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name="candidates")
-    name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='candidates/', blank=True, null=True) 
-
-    
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="candidates/", null=True, blank=True)
+    position = models.ForeignKey(
+        "Position", on_delete=models.CASCADE, related_name="candidates", null=True, blank=True
+    )
 
     def __str__(self):
-        return f"{self.name} - {self.position.name} ({self.election.title})"
+        return f"{self.name} ({self.position.name if self.position else 'No Position'})"
+
 
 
 class Vote(models.Model):
