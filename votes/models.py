@@ -6,6 +6,7 @@ class User(AbstractUser):
     is_admin = models.BooleanField(default=False)
     is_voter = models.BooleanField(default=True)
     matric_no = models.CharField(max_length=9, unique=True, default=None, null=True, blank=True)
+    full_name = models.CharField(max_length=255, null=True, blank=True)
 
     
     def __str__(self):

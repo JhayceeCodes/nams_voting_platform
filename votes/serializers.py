@@ -83,16 +83,20 @@ class VoteSerializer(serializers.ModelSerializer):
 
 class VoterSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    
 
     class Meta:
         model = User
-        fields = ["matric_no", "password"]
+        fields = ["full_name", "matric_no", "password"]
 
     def create(self, validated_data):
         password = validated_data.pop("password")
+        full_name = validated_data.get("full_name", "")
+
         user = User.objects.create(
             matric_no=validated_data["matric_no"],
             username=validated_data["matric_no"],  # also set username to matric_no
+            full_name=full_name,
             is_voter=True,
             is_admin=False,
         )
