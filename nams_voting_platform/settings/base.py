@@ -99,6 +99,21 @@ REST_FRAMEWORK = {
     ),
 }
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        minutes=int(os.getenv("ACCESS_TOKEN_LIFETIME_MINUTES", 5))
+    ),
+    "REFRESH_TOKEN_LIFETIME": timedelta(
+        days=int(os.getenv("REFRESH_TOKEN_LIFETIME_DAYS", 1))
+    ),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": False,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": os.getenv("SECRET_KEY"),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
 
 # CORS & CSRF
 CORS_ALLOW_ALL_ORIGINS = False
