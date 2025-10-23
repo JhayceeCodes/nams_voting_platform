@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import serializers
 from .models import Election, Position, Candidate, Vote
 from django.contrib.auth import get_user_model
@@ -107,6 +108,14 @@ class VoterSignupSerializer(serializers.ModelSerializer):
         # Check digits 3–6 (indexes 2:6)
         if value[2:6] != "0561":
             raise serializers.ValidationError("Matric number must contain '0561' as its 3rd–6th digits.")
+        
+        start_two = int(value[:2])
+        current_year_two = int(str(datetime.now().year)[-2:])  # e.g., 25 for 2025
+
+        if start_two < 21 or start_two > current_year_two:
+            raise serializers.ValidationError(
+                f"Matric number must start with 21 up to {current_year_two}."
+            )
 
         return value
 
