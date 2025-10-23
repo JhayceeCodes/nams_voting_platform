@@ -34,9 +34,9 @@ urlpatterns = [
     path('api/auth/', include('rest_framework.urls')),  
 
     #authentication endpoints
-    path('api/auth/token', TokenObtainPairView.as_view(), name='token_obtain_pair'), #login
-    path('api/auth/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'), #login
+    path('api/refresh-token/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # voter signup
-    path('api/signup', VoterSignupView.as_view(), name='voter_signup')
+    path('api/signup/', VoterSignupView.as_view(), name='voter_signup')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

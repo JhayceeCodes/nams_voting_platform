@@ -8,7 +8,7 @@ User = get_user_model()
 
 class CandidateSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
-    position = serializers.PrimaryKeyRelatedField(queryset=Position.objects.all(), required=False)
+    position = serializers.PrimaryKeyRelatedField(queryset=Position.objects.all(), required=True)
 
     class Meta:
         model = Candidate
@@ -52,16 +52,21 @@ class VoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vote
         fields = ["id", "election", "position", "candidate", "voter"]
+        extra_kwargs = {
+            "election": {"required": True},
+            "position": {"required": True},
+            "candidate": {"required": True},
+        }
 
     def validate(self, data):
-        """
-        Custom validation:
-        - Ensure candidate belongs to the given position.
-        - Ensure position belongs to the given election.
-        """
-        candidate = data["candidate"]
-        position = data["position"]
-        election = data["election"]
+        
+        candidate = data.get("candidate")
+        position = data.get("position")
+        election = data.get("election")
+
+        # If any of the three are missing, skip relational validation
+        if not all([candidate, position, election]):
+            return data
 
         if candidate.position != position:
             raise serializers.ValidationError("Candidate does not belong to this position.")
