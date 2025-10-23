@@ -88,20 +88,34 @@ class VoteSerializer(serializers.ModelSerializer):
 
 class VoterSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    
 
     class Meta:
         model = User
         fields = ["full_name", "matric_no", "password"]
 
+    def validate_matric_no(self, value):
+        """
+        Validate that the matric_no is exactly 9 digits long
+        and that digits 3–6 are '0561'.
+        """
+        if not value.isdigit():
+            raise serializers.ValidationError("Matric number must contain only digits.")
+
+        if len(value) != 9:
+            raise serializers.ValidationError("Matric number must be exactly 9 digits.")
+
+        # Check digits 3–6 (indexes 2:6)
+        if value[2:6] != "0561":
+            raise serializers.ValidationError("Matric number must contain '0561' as its 3rd–6th digits.")
+
+        return value
+
     def create(self, validated_data):
         password = validated_data.pop("password")
-        full_name = validated_data.get("full_name", "")
-
         user = User.objects.create(
+            full_name=validated_data.get("full_name"),
             matric_no=validated_data["matric_no"],
             username=validated_data["matric_no"],  # also set username to matric_no
-            full_name=full_name,
             is_voter=True,
             is_admin=False,
         )
