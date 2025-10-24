@@ -30,11 +30,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", 
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware", 
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -115,9 +115,4 @@ SIMPLE_JWT = {
 }
 
 
-# CORS & CSRF
-CORS_ALLOW_ALL_ORIGINS = False
-frontend_urls = os.getenv("FRONTEND_URLS", "")
-if frontend_urls:
-    CORS_ALLOWED_ORIGINS = [url.strip().rstrip('/') for url in frontend_urls.split(",")]
-    CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
+
