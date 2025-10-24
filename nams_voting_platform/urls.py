@@ -40,5 +40,6 @@ urlpatterns = [
     # voter signup
     path('api/signup/', VoterSignupView.as_view(), name='voter_signup'),
 
-    path("api/checkVoteStatus/", check_vote_status, name="check-vote-status"),
+    #check id user has voted
+    path("api/check-vote-status/", check_vote_status, name="check-vote-status"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
