@@ -92,7 +92,7 @@ class VoterSignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["full_name", "matric_no", "password"]
+        fields = ["full_name", "matric_no", "password", "have_voted"]
 
     def validate_matric_no(self, value):
         """

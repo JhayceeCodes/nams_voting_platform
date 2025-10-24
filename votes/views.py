@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, BasePermission
+from rest_framework.decorators import api_view, permission_classes
 from .models import Election, Position, Candidate, Vote
 from .serializers import ElectionSerializer, PositionSerializer, CandidateSerializer, VoteSerializer, VoterSignupSerializer
 from rest_framework import generics, permissions
@@ -10,6 +11,10 @@ from django.contrib.auth import get_user_model
 
 
 User = get_user_model()
+
+
+
+
 
 class ElectionViewSet(viewsets.ModelViewSet):
     queryset = Election.objects.all()
@@ -83,3 +88,10 @@ class VoterSignupView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = VoterSignupSerializer
     permission_classes = [permissions.AllowAny]
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def check_vote_status(request):
+    voter = request.user
+    return Response({"have_voted": voter.have_voted})

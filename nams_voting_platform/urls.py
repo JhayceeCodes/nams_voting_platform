@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from votes.views import ElectionViewSet, PositionViewSet, CandidateViewSet, VoteViewSet, VoterSignupView
+from votes.views import ElectionViewSet, PositionViewSet, CandidateViewSet, VoteViewSet, VoterSignupView, check_vote_status
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
@@ -38,5 +38,7 @@ urlpatterns = [
     path('api/refresh-token/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # voter signup
-    path('api/signup/', VoterSignupView.as_view(), name='voter_signup')
+    path('api/signup/', VoterSignupView.as_view(), name='voter_signup'),
+
+    path("api/checkVoteStatus/", check_vote_status, name="check-vote-status"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
