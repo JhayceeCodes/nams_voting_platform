@@ -82,7 +82,15 @@ class VoteSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         if request and request.user.is_authenticated:
             validated_data["voter"] = request.user
-        return super().create(validated_data)
+
+        vote = super().create(validated_data)
+
+        voter = request.user
+        if not voter.have_voted:
+            voter.have_voted = True
+            voter.save(update_fields=["have_voted"])
+
+        return vote
     
 
 
